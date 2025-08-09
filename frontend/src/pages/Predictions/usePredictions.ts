@@ -1,54 +1,44 @@
 import { Fixture, Prediction, Team } from "../../../../shared/types/database";
 
-interface Predictions {
-  fixtures: Fixture[];
-  predictions: Prediction[];
-  teams: Team[];
-}
-
 export const usePredictions = (
-  teams: Team[],
   fixtures: Fixture[],
-  predictions: Prediction[]
+  predictions: Prediction[],
+  teams: Team[]
 ) => {
-  const groups = teams.reduce((acc, team) => {
-    if (!acc[team.groupLetter]) {
-      acc[team.groupLetter] = {
-        fixtures: [],
-        predictions: [],
-        teams: [],
-      };
-    }
+  let roundPredictions: Record<
+    string,
+    {
+      fixture: Fixture;
+      prediction: Prediction;
+      homeTeam: Team;
+      awayTeam: Team;
+    }[]
+  > = {};
 
-    acc[team.groupLetter].teams = [
-      ...(acc[team.groupLetter].teams || []),
-      team,
-    ];
-
-    return acc;
-  }, {} as Record<string, Predictions>);
-
-  const groupFixtures = fixtures.reduce((acc, fixture) => {
+  fixtures.forEach((fixture) => {
     const prediction = predictions.find(
       (prediction) => prediction.fixtureId === fixture.id
     );
 
-    if (!prediction) return acc;
+    const homeTeam = teams.find((team) => fixture.homeTeamId === team.id);
+    const awayTeam = teams.find((team) => fixture.awayTeamId === team.id);
 
-    acc[fixture.groupLetter].fixtures = [
-      ...(acc[fixture.groupLetter].fixtures || []),
-      fixture,
-    ];
+    if (!prediction || !homeTeam || !awayTeam) return;
 
-    if (prediction) {
-      acc[fixture.groupLetter].predictions = [
-        ...(acc[fixture.groupLetter].predictions || []),
-        prediction,
+    if (!roundPredictions[fixture.roundNumber]) {
+      roundPredictions[fixture.roundNumber] = [
+        { fixture, prediction, homeTeam, awayTeam },
       ];
+      return;
     }
 
-    return acc;
-  }, groups as Record<string, Predictions>);
+    roundPredictions[fixture.roundNumber].push({
+      fixture,
+      prediction,
+      homeTeam,
+      awayTeam,
+    });
+  });
 
-  return groupFixtures;
+  return roundPredictions;
 };

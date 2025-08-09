@@ -3,6 +3,8 @@ import Banner from "../components/Banner";
 import Box from "../components/Box";
 
 const About = () => {
+  // TODO update
+
   return (
     <div className="flex flex-col items-center justify-center">
       <Banner>

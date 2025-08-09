@@ -22,18 +22,11 @@ const calculateSingleFixturePoints = (
     return 0;
   }
 
-  // Correct result 25 points
+  // Correct result 15 points
   if (phs === fhs && pas === fas) {
-    return 25;
-  }
-  // Correct draw prediction 10 points
-  if (phs === pas && fhs === fas) {
-    return 10;
-  }
-  // Correct score margin 15 points
-  if (phs - pas === fhs - fas) {
     return 15;
   }
+
   // Correct winner 5 points
   if ((phs > pas && fhs > fas) || (phs < pas && fhs < fas)) {
     return 5;
@@ -45,12 +38,11 @@ const calculateSingleFixturePoints = (
 export const calculateFixturePoints = (
   fixture: InsertFixture,
   userPredictions: Prediction[]
-) => {
-  const fixturePoints = userPredictions.map((prediction) => ({
-    username: prediction.username,
+): Prediction[] => {
+  const updatedPrediction = userPredictions.map((prediction) => ({
+    ...prediction,
     points: calculateSingleFixturePoints(prediction, fixture),
-    fixtureId: prediction.fixtureId,
   }));
 
-  return fixturePoints;
+  return updatedPrediction;
 };

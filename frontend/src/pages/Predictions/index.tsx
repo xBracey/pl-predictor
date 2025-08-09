@@ -1,32 +1,24 @@
 import { Dialog, Loader } from "@mantine/core";
-import {
-  Fixture,
-  Player,
-  Prediction,
-  Team,
-} from "../../../../shared/types/database";
-import LeaguePredictions from "../../components/LeaguePredictions";
+import { Fixture, Prediction, Team } from "../../../../shared/types/database";
 import { usePredictions } from "./usePredictions";
 import { Fragment, useEffect, useState } from "react";
-import { GroupSwitches } from "../../zustand/predictions/types";
 import Banner from "../../components/Banner";
 import UserBonuses from "../../components/UserBonuses";
+import SinglePrediction from "../../components/Prediction/SinglePrediction";
+import PredictionLock from "../../components/PredictionLock";
 
-const predictionLockTime = 1718474400000; // 2024-06-15 20:00:00
+// TODO fix dynamically
+const predictionLockTime = 1818474400000; // 2024-06-15 20:00:00
 
 interface PredictionsPageProps {
   fixtures: Fixture[];
   predictions: Prediction[];
   teams: Team[];
   username: string;
-  onPredictionChange: (prediction: Prediction, groupLetter: string) => void;
+  onPredictionChange: (prediction: Prediction) => void;
   isSavingPrediction: boolean;
   isError: boolean;
-  groupSwitches: GroupSwitches;
-  onGroupSwitchChange: (groupLetter: string, switches: number[]) => void;
-  onEditBonusPlayer: (playerId: number) => void;
   onEditBonusTeam: (teamId: number) => void;
-  players: Player[];
 }
 
 export const PredictionsPage = ({
@@ -37,24 +29,15 @@ export const PredictionsPage = ({
   onPredictionChange,
   isSavingPrediction,
   isError,
-  groupSwitches,
-  onGroupSwitchChange,
-  onEditBonusPlayer,
   onEditBonusTeam,
-  players,
 }: PredictionsPageProps) => {
   const [currentTime, setCurrentTime] = useState(Date.now());
 
-  const groupFixtures = usePredictions(teams, fixtures, predictions);
+  const groupFixtures = usePredictions(fixtures, predictions, teams);
 
-  const onEditGroupSwitch = (groupLetter: string) => (switches: number[]) => {
-    onGroupSwitchChange(groupLetter, switches);
+  const onEditPrediction = (prediction: Prediction) => {
+    onPredictionChange(prediction);
   };
-
-  const onEditPrediction =
-    (groupLetter: string) => (prediction: Prediction) => {
-      onPredictionChange(prediction, groupLetter);
-    };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -90,34 +73,34 @@ export const PredictionsPage = ({
       </Banner>
 
       <UserBonuses
-        onEditBonusPlayer={onEditBonusPlayer}
         onEditBonusTeam={onEditBonusTeam}
-        players={players}
         teams={teams}
         isPredictionLocked={isPredictionLocked}
       />
 
       <div className="mx-auto mt-6 flex w-full max-w-4xl flex-col gap-12">
-        {Object.entries(groupFixtures).map(
-          ([groupLetter, { fixtures, predictions, teams }]) => (
-            <div className="flex flex-col gap-2" key={groupLetter}>
-              <h2 className="text-center text-2xl font-bold text-white">
-                Group {groupLetter}
-              </h2>
-              <LeaguePredictions
-                key={groupLetter}
-                fixtures={fixtures}
-                predictions={predictions}
-                teams={teams}
-                username={username}
-                onPredictionChange={onEditPrediction(groupLetter)}
-                groupSwitches={groupSwitches[groupLetter]?.switches ?? []}
-                onEditGroupSwitch={onEditGroupSwitch(groupLetter)}
-                isPredictionLocked={isPredictionLocked}
-              />
+        {Object.entries(groupFixtures).map(([roundNumber, predictions]) => (
+          <div className="flex flex-col gap-2" key={roundNumber}>
+            <h2 className="text-center text-2xl font-bold text-white">
+              Round {roundNumber}
+            </h2>
+
+            <div className="my-4 grid grid-cols-1 gap-4 py-2 md:grid-cols-2 lg:grid-cols-3">
+              {predictions.map((prediction) => (
+                <SinglePrediction
+                  key={prediction.fixture.id}
+                  homeTeam={prediction.homeTeam}
+                  awayTeam={prediction.awayTeam}
+                  username={username}
+                  prediction={prediction.prediction}
+                  onChange={onEditPrediction}
+                />
+              ))}
             </div>
-          )
-        )}
+
+            <PredictionLock isLocked />
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -25,10 +25,10 @@ export const getFixtureHandler: ServiceHandler = async (request, reply) => {
 
 export const insertFixturesHandler: ServiceHandler = async (request, reply) => {
   const data = request.body as {
-    groupLetter: string;
     homeTeamId: number;
     awayTeamId: number;
     dateTime: number;
+    roundNumber: number;
   };
 
   await insertFixture(data);
@@ -40,7 +40,7 @@ export const editFixtureHandler: ServiceHandler = async (request, reply) => {
   const { id } = request.params as { id: string };
 
   const data = request.body as {
-    groupLetter: string;
+    roundNumber: number;
     homeTeamId: number;
     awayTeamId: number;
     dateTime: number;

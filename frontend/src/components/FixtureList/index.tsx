@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import { Fixture, RoundFixture, Team } from "../../../../shared/types/database";
+import { Fixture, Team } from "../../../../shared/types/database";
 import FixtureComponent from "../Fixture";
 
 interface IFixtureList {
   teams: Team[];
-  fixtures: (Fixture | RoundFixture)[];
+  fixtures: Fixture[];
 }
 
 const FixtureList = ({ teams, fixtures }: IFixtureList) => {
@@ -55,10 +55,6 @@ const FixtureList = ({ teams, fixtures }: IFixtureList) => {
             awayTeam={fixture.awayTeam}
             homeScore={fixture.homeScore}
             awayScore={fixture.awayScore}
-            homeTeamExtraTimeScore={fixture.homeTeamExtraTimeScore}
-            awayTeamExtraTimeScore={fixture.awayTeamExtraTimeScore}
-            homeTeamPenaltiesScore={fixture.homeTeamPenaltiesScore}
-            awayTeamPenaltiesScore={fixture.awayTeamPenaltiesScore}
             dateTime={fixture.dateTime}
           />
         </div>

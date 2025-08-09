@@ -3,7 +3,6 @@ import { useGetFixture } from "../../../queries/useGetFixture";
 import AdminAddEdit from "../AdminAddEdit";
 import { useGetTeams } from "../../../queries/useGetTeams";
 import { useForm } from "@mantine/form";
-import { useGetGroups } from "../../../queries/useGetGroups";
 import { usePostFixture } from "../../../queries/usePostFixture";
 import { Button, LoadingOverlay, NumberInput, Select } from "@mantine/core";
 import { Fixture } from "../../../../../shared/types/database";
@@ -17,14 +16,13 @@ interface IFixtureAdmin {
 const FixtureAdmin = ({ id }: IFixtureAdmin) => {
   const { data: fixture, isLoading } = useGetFixture(id);
   const { data: teams, isLoading: isLoadingTeams } = useGetTeams();
-  const { data: groups, isLoading: isLoadingGroups } = useGetGroups();
   const { postFixture, isLoading: isLoadingFixture } = usePostFixture(id);
   const navigate = useNavigate();
 
   const form = useForm<Omit<Fixture, "id">>({
     mode: "controlled",
     initialValues: {
-      groupLetter: undefined,
+      roundNumber: undefined,
       homeTeamId: undefined,
       awayTeamId: undefined,
       dateTime: undefined,
@@ -32,7 +30,7 @@ const FixtureAdmin = ({ id }: IFixtureAdmin) => {
       awayTeamScore: undefined,
     },
     validate: (values) => ({
-      groupLetter: values.groupLetter ? undefined : "Group is required",
+      roundNumber: values.roundNumber ? undefined : "Round Number is required",
       homeTeamId: values.homeTeamId ? undefined : "Home team is required",
       awayTeamId: values.awayTeamId ? undefined : "Away team is required",
       dateTime: values.dateTime ? undefined : "Date is required",
@@ -42,7 +40,7 @@ const FixtureAdmin = ({ id }: IFixtureAdmin) => {
   useEffect(() => {
     if (fixture) {
       form.setValues({
-        groupLetter: fixture.groupLetter,
+        roundNumber: fixture.roundNumber,
         homeTeamId: fixture.homeTeamId,
         awayTeamId: fixture.awayTeamId,
         dateTime: fixture.dateTime,
@@ -55,13 +53,11 @@ const FixtureAdmin = ({ id }: IFixtureAdmin) => {
   const teamsOptions = useMemo(() => {
     if (!teams) return [];
 
-    return teams
-      .filter((team) => team.groupLetter === form.values?.groupLetter)
-      .map((team) => ({
-        label: team.name,
-        value: team.id.toString(),
-      }));
-  }, [teams, form.values.groupLetter]);
+    return teams.map((team) => ({
+      label: team.name,
+      value: team.id.toString(),
+    }));
+  }, [teams]);
 
   return (
     <AdminAddEdit
@@ -70,9 +66,7 @@ const FixtureAdmin = ({ id }: IFixtureAdmin) => {
       entityIsDefined={!!fixture}
       title="Fixture"
     >
-      <LoadingOverlay
-        visible={isLoadingFixture || isLoadingTeams || isLoadingGroups}
-      />
+      <LoadingOverlay visible={isLoadingFixture || isLoadingTeams} />
       <form
         onSubmit={form.onSubmit((values) => {
           postFixture(values);
@@ -80,12 +74,11 @@ const FixtureAdmin = ({ id }: IFixtureAdmin) => {
         })}
         className="flex flex-col gap-4"
       >
-        <Select
-          id="groupLetter"
-          label="Group Letter"
+        <NumberInput
+          id="roundNumber"
+          label="Round Number"
           required
-          data={groups}
-          {...form.getInputProps("groupLetter")}
+          {...form.getInputProps("homeTeamScore")}
         />
 
         <Select
@@ -93,7 +86,6 @@ const FixtureAdmin = ({ id }: IFixtureAdmin) => {
           label="Home Team"
           required
           data={teamsOptions}
-          disabled={!form.values.groupLetter}
           {...form.getInputProps("homeTeamId")}
           value={form.values.homeTeamId?.toString()}
         />
@@ -103,7 +95,6 @@ const FixtureAdmin = ({ id }: IFixtureAdmin) => {
           label="Away Team"
           required
           data={teamsOptions}
-          disabled={!form.values.groupLetter}
           {...form.getInputProps("awayTeamId")}
           value={form.values.awayTeamId?.toString()}
         />

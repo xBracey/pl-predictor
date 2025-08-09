@@ -1,20 +1,16 @@
 import { Select } from "@mantine/core";
-import { Player, Team } from "../../../../shared/types/database";
+import { Team } from "../../../../shared/types/database";
 import { usePredictionStore } from "../../zustand/predictions";
 import PredictionLock from "../PredictionLock";
 
 interface IUserBonuses {
-  onEditBonusPlayer: (playerId: number) => void;
   onEditBonusTeam: (teamId: number) => void;
-  players: Player[];
   teams: Team[];
   isPredictionLocked: boolean;
 }
 
 const UserBonuses = ({
-  onEditBonusPlayer,
   onEditBonusTeam,
-  players,
   teams,
   isPredictionLocked,
 }: IUserBonuses) => {
@@ -39,20 +35,6 @@ const UserBonuses = ({
             searchable
             value={state.bonuses.teamId ? state.bonuses.teamId.toString() : ""}
             onChange={(value) => onEditBonusTeam(parseInt(value, 10))}
-          />
-
-          <Select
-            label="Bonus Player (10 points per goal)"
-            placeholder="Select bonus player"
-            data={players.map((player) => ({
-              value: player.id.toString(),
-              label: player.name,
-            }))}
-            searchable
-            value={
-              state.bonuses.playerId ? state.bonuses.playerId.toString() : ""
-            }
-            onChange={(value) => onEditBonusPlayer(parseInt(value, 10))}
           />
         </div>
       </div>

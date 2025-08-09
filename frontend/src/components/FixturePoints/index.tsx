@@ -1,10 +1,5 @@
 import { useMemo } from "react";
-import {
-  Fixture,
-  Prediction,
-  Team,
-  UserFixture,
-} from "../../../../shared/types/database";
+import { Fixture, Prediction, Team } from "../../../../shared/types/database";
 import FixtureComponent from "../Fixture";
 
 interface FixturesWithPoints {
@@ -40,7 +35,6 @@ const getBackgroundColor = (
 interface IFixturePoints {
   teams: Team[];
   fixtures: Fixture[];
-  userFixtures: UserFixture[];
   predictions: Prediction[];
 }
 
@@ -91,12 +85,7 @@ const FixtureTable = ({ fixtures }: { fixtures: FixturesWithPoints[] }) => (
   </div>
 );
 
-const FixturePoints = ({
-  teams,
-  fixtures,
-  userFixtures,
-  predictions,
-}: IFixturePoints) => {
+const FixturePoints = ({ teams, fixtures, predictions }: IFixturePoints) => {
   const fixturesWithPoints = useMemo(() => {
     return fixtures.map((fixture) => {
       const homeTeam = teams.find(
@@ -105,9 +94,6 @@ const FixturePoints = ({
       const awayTeam = teams.find(
         (team) => team.id === fixture.awayTeamId
       )?.name;
-      const userFixture = userFixtures.find(
-        (userFixture) => userFixture.fixtureId === fixture.id
-      );
       const prediction = predictions.find(
         (prediction) => prediction.fixtureId === fixture.id
       );
@@ -117,7 +103,7 @@ const FixturePoints = ({
         homeScore: fixture.homeTeamScore,
         awayScore: fixture.awayTeamScore,
         dateTime: fixture.dateTime,
-        points: userFixture?.points,
+        points: prediction?.points,
         prediction: prediction,
         hasBeenPlayed:
           fixture.homeTeamScore !== null &&
@@ -126,7 +112,7 @@ const FixturePoints = ({
           fixture.awayTeamScore !== undefined,
       };
     });
-  }, [fixtures, teams, userFixtures]);
+  }, [fixtures, teams]);
 
   const fixturesPlayed = useMemo(() => {
     return fixturesWithPoints.filter((fixture) => fixture.hasBeenPlayed);

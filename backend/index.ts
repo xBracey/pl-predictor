@@ -8,7 +8,7 @@ const server = fastify({
 });
 
 server.register(jwt, {
-  secret: "ArcticLegoHuskySquaredle",
+  secret: "ArcticLegoHuskyBalatro",
 });
 
 server.register(cors);

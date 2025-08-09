@@ -4,20 +4,18 @@ import { User } from "../../../shared/types/database";
 import { useUserStore } from "../zustand/user";
 
 interface PostUserBonusesRequest {
-  bonusPlayerId?: number;
   bonusTeamId?: number;
   token: string;
 }
 
 export const editUserBonuses = async ({
-  bonusPlayerId,
   bonusTeamId,
   token,
 }: PostUserBonusesRequest) => {
   try {
     const resp = await apiRequest<User>(`/users/me/bonuses`, {
       method: "PUT",
-      data: { bonusPlayerId, bonusTeamId },
+      data: { bonusTeamId },
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -32,14 +30,8 @@ export const editUserBonuses = async ({
 export const usePostUserBonuses = (onSuccess: (user: User) => void) => {
   const { token } = useUserStore();
 
-  const postPutUserBonuses = ({
-    bonusPlayerId,
-    bonusTeamId,
-  }: {
-    bonusPlayerId?: number;
-    bonusTeamId?: number;
-  }) => {
-    return editUserBonuses({ bonusPlayerId, bonusTeamId, token });
+  const postPutUserBonuses = ({ bonusTeamId }: { bonusTeamId?: number }) => {
+    return editUserBonuses({ bonusTeamId, token });
   };
 
   const { mutate, isLoading, isError, data } = useMutation(postPutUserBonuses, {

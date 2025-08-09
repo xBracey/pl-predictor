@@ -21,7 +21,6 @@ export const getUser = async (username: string) => {
     username: resp[0].username,
     password: resp[0].password,
     admin: !!resp[0].admin,
-    bonusPlayerId: resp[0].bonusPlayerId,
     bonusTeamId: resp[0].bonusTeamId,
   };
 };
@@ -44,14 +43,10 @@ export const editUser = (username: string, admin: boolean) => {
     .execute();
 };
 
-export const editUserBonuses = (
-  username: string,
-  bonusPlayerId: number,
-  bonusTeamId: number
-) => {
+export const editUserBonuses = (username: string, bonusTeamId: number) => {
   return db
     .update(users)
-    .set({ bonusPlayerId, bonusTeamId })
+    .set({ bonusTeamId })
     .where(eq(users.username, username))
     .execute();
 };

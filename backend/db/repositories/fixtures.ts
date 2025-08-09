@@ -1,6 +1,6 @@
 import { eq, sql } from "drizzle-orm";
 import { db } from "..";
-import { InsertFixture, fixtures, predictions, userFixtures } from "../schema";
+import { InsertFixture, fixtures, predictions } from "../schema";
 import { calculateFixturePoints } from "../points/calculateFixturePoints";
 
 export const getFixtures = () => db.select().from(fixtures).execute();
@@ -30,10 +30,10 @@ export const editFixture = async (id: number, fixture: InsertFixture) => {
   const newPoints = calculateFixturePoints({ ...fixture, id }, userPredictions);
 
   await db
-    .insert(userFixtures)
+    .insert(predictions)
     .values(newPoints)
     .onConflictDoUpdate({
-      target: [userFixtures.username, userFixtures.fixtureId],
+      target: [predictions.username, predictions.fixtureId],
       set: { points: sql`excluded.points` },
     })
     .execute();

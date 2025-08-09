@@ -13,7 +13,6 @@ export const useUserBonuses = () => {
     dispatch({
       type: "EDIT_BONUSES",
       payload: {
-        playerId: data.bonusPlayerId,
         teamId: data.bonusTeamId,
         saved: true,
       },
@@ -23,14 +22,6 @@ export const useUserBonuses = () => {
   const { postUserBonuses: editUserBonuses } = usePostUserBonuses(
     onEditUserBonusesSuccess
   );
-
-  const onEditBonusPlayer = (playerId: number) => {
-    dispatch({
-      type: "EDIT_BONUSES",
-      payload: { playerId, saved: false },
-    });
-    editUserBonuses({ bonusPlayerId: playerId });
-  };
 
   const onEditBonusTeam = (teamId: number) => {
     dispatch({
@@ -50,7 +41,6 @@ export const useUserBonuses = () => {
     dispatch({
       type: "EDIT_BONUSES",
       payload: {
-        playerId: data.bonusPlayerId,
         teamId: data.bonusTeamId,
         saved: false,
       },
@@ -59,5 +49,5 @@ export const useUserBonuses = () => {
 
   useGetMe(onUserBonusesSuccess);
 
-  return { onEditBonusPlayer, onEditBonusTeam };
+  return { onEditBonusTeam };
 };

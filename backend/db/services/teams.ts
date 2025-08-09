@@ -19,24 +19,18 @@ export const getTeamHandler: ServiceHandler = async (request, reply) => {
 };
 
 export const insertTeamsHandler: ServiceHandler = async (request, reply) => {
-  const { name, groupLetter } = request.body as {
-    name: string;
-    groupLetter: string;
-  };
+  const { name } = request.body as { name: string };
 
-  await insertTeam({ name, groupLetter });
+  await insertTeam({ name });
 
-  reply.send({ name, groupLetter });
+  reply.send({ name });
 };
 
 export const editTeamHandler: ServiceHandler = async (request, reply) => {
   const { id } = request.params as { id: string };
-  const { name, groupLetter } = request.body as {
-    name: string;
-    groupLetter: string;
-  };
+  const { name } = request.body as { name: string };
 
-  await editTeam(parseInt(id), { name, groupLetter });
+  await editTeam(parseInt(id), { name });
 
-  reply.send({ name, groupLetter });
+  reply.send({ name });
 };

@@ -1,1 +1,0 @@
-ALTER TABLE players ADD `goals` integer DEFAULT 0;

@@ -8,12 +8,7 @@ interface UserStore {
 
 export const useUserStore = create<UserStore>()(
   persist(
-    (set) => ({
-      token: "",
-      setToken: (token: string) => set({ token }),
-    }),
-    {
-      name: "user",
-    }
+    (set) => ({ token: "", setToken: (token: string) => set({ token }) }),
+    { name: "user" }
   )
 );

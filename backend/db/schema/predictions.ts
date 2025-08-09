@@ -14,6 +14,7 @@ export const predictions = sqliteTable(
     fixtureId: integer("fixture_id").references(() => fixtures.id),
     homeTeamScore: integer("home_team_score"),
     awayTeamScore: integer("away_team_score"),
+    points: integer("points"),
   },
   (table) => ({
     pk: primaryKey({ columns: [table.username, table.fixtureId] }),

@@ -22,7 +22,6 @@ export const getUserHandler: ServiceHandler = async (request, reply) => {
   reply.send({
     username: user.username,
     admin: !!user.admin,
-    bonusPlayerId: user.bonusPlayerId,
     bonusTeamId: user.bonusTeamId,
   });
 };
@@ -33,7 +32,6 @@ export const getUsersHandler: ServiceHandler = async (request, reply) => {
   const usersWithoutPassword = users.map((user) => ({
     username: user.username,
     admin: !!user.admin,
-    bonusPlayerId: user.bonusPlayerId,
     bonusTeamId: user.bonusTeamId,
   }));
 
@@ -58,7 +56,6 @@ export const getMeHandler: (server: FastifyInstance) => ServiceHandler =
     reply.send({
       username: user.username,
       admin: !!user.admin,
-      bonusPlayerId: user.bonusPlayerId,
       bonusTeamId: user.bonusTeamId,
     });
   };
@@ -120,12 +117,9 @@ export const editMyBonuses: (server: FastifyInstance) => ServiceHandler =
       return;
     }
 
-    const { bonusPlayerId, bonusTeamId } = request.body as {
-      bonusPlayerId: number;
-      bonusTeamId: number;
-    };
+    const { bonusTeamId } = request.body as { bonusTeamId: number };
 
-    await editUserBonuses(userDecoded.username, bonusPlayerId, bonusTeamId);
+    await editUserBonuses(userDecoded.username, bonusTeamId);
 
-    reply.send({ bonusPlayerId, bonusTeamId });
+    reply.send({ bonusTeamId });
   };

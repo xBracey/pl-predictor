@@ -1,12 +1,12 @@
 import dayjs from "dayjs";
-import { Fixture, RoundFixture, Team } from "../../../../shared/types/database";
+import { Fixture, Team } from "../../../../shared/types/database";
 import FixtureList from "../FixtureList";
 import { useMemo } from "react";
 import Banner from "../Banner";
 
 interface ITodaysMatches {
   teams: Team[];
-  fixtures: (Fixture | RoundFixture)[];
+  fixtures: Fixture[];
 }
 
 const TodaysMatches = ({ teams, fixtures }: ITodaysMatches) => {

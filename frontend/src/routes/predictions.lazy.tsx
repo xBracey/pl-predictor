@@ -4,13 +4,11 @@ import { useGetFixtures } from "../queries/useGetFixtures";
 import { useGetMe } from "../queries/useGetMe";
 import Loading from "../components/Loading";
 import { PredictionsLayout } from "../layouts/Predictions";
-import { useGetPlayers } from "../queries/useGetPlayers";
 
 const Predictions = () => {
   const { data: user, isLoading: userIsLoading } = useGetMe();
   const { data: teams } = useGetTeams();
   const { data: fixtures } = useGetFixtures();
-  const { data: players } = useGetPlayers();
 
   if (userIsLoading) {
     return <Loading />;
@@ -25,7 +23,6 @@ const Predictions = () => {
       username={user.username}
       teams={teams}
       fixtures={fixtures}
-      players={players}
     />
   );
 };

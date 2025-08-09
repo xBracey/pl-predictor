@@ -4,13 +4,6 @@ export type PredictionWithSaved = Prediction & {
   saved: boolean;
 };
 
-export type GroupSwitches = {
-  [groupLetter: string]: {
-    switches: number[];
-    saved: boolean;
-  };
-};
-
 export type SetPredictions = {
   type: "SET_PREDICTIONS";
   payload: Prediction[];
@@ -31,20 +24,9 @@ export type AddPredictions = {
   payload: PredictionWithSaved[];
 };
 
-export type EditGroupSwitch = {
-  type: "EDIT_GROUP_SWITCH";
-  payload: { groupLetter: string; switches: number[]; saved: boolean };
-};
-
-export type EditGroupSwitches = {
-  type: "EDIT_GROUP_SWITCHES";
-  payload: GroupSwitches;
-};
-
 export type EditBonuses = {
   type: "EDIT_BONUSES";
   payload: {
-    playerId?: number;
     teamId?: number;
     saved: boolean;
   };
@@ -52,9 +34,7 @@ export type EditBonuses = {
 
 export interface PredictionState {
   predictions: (Prediction & { saved: boolean })[];
-  groupSwitches: GroupSwitches;
   bonuses: {
-    playerId?: number;
     teamId?: number;
     saved: boolean;
   };
@@ -65,6 +45,4 @@ export type PredictionActions =
   | ChangePredictions
   | ChangePrediction
   | AddPredictions
-  | EditGroupSwitch
-  | EditGroupSwitches
   | EditBonuses;
