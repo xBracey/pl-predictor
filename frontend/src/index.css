@@ -1,0 +1,9 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.lds-ellipsis div {
+  background-color: white !important;
+}

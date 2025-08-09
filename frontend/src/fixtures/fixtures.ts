@@ -1,0 +1,58 @@
+import { Fixture } from "../../../shared/types/database";
+
+export const fixtures: Fixture[] = [
+  {
+    id: 1,
+    homeTeamId: 1,
+    awayTeamId: 2,
+    dateTime: 1630512000000,
+    groupLetter: "A",
+    homeTeamScore: 0,
+    awayTeamScore: 0,
+  },
+  {
+    id: 2,
+    homeTeamId: 3,
+    awayTeamId: 4,
+    dateTime: 1630512000000,
+    groupLetter: "A",
+    homeTeamScore: 1,
+    awayTeamScore: 0,
+  },
+  {
+    id: 3,
+    homeTeamId: 2,
+    awayTeamId: 3,
+    dateTime: 1630512000000,
+    groupLetter: "A",
+    homeTeamScore: 0,
+    awayTeamScore: 2,
+  },
+  {
+    id: 4,
+    homeTeamId: 4,
+    awayTeamId: 1,
+    dateTime: 1630512000000,
+    groupLetter: "A",
+    homeTeamScore: 1,
+    awayTeamScore: 1,
+  },
+  {
+    id: 5,
+    homeTeamId: 1,
+    awayTeamId: 3,
+    dateTime: 1630512000000,
+    groupLetter: "A",
+    homeTeamScore: 0,
+    awayTeamScore: 2,
+  },
+  {
+    id: 6,
+    homeTeamId: 2,
+    awayTeamId: 4,
+    dateTime: 1630512000000,
+    groupLetter: "A",
+    homeTeamScore: 1,
+    awayTeamScore: 0,
+  },
+];
