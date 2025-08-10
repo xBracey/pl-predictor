@@ -23,12 +23,12 @@ const getBackgroundColor = (
   }
 
   switch (points) {
-    case 25:
+    case 15:
       return "bg-green-700";
-    case 0:
-      return "bg-red-700";
-    default:
+    case 5:
       return "bg-yellow-700";
+    default:
+      return "bg-red-700";
   }
 };
 
@@ -39,7 +39,7 @@ interface IFixturePoints {
 }
 
 const FixtureTable = ({ fixtures }: { fixtures: FixturesWithPoints[] }) => (
-  <div className="mx-auto flex w-full max-w-3xl flex-col overflow-hidden rounded-md">
+  <div className="mx-auto flex w-full max-w-3xl flex-col overflow-hidden rounded-b-md">
     <div className="bg-azure-900 flex px-4 py-2 text-center text-sm">
       <div className="flex-1">
         <p className="text-white">Fixture</p>
@@ -123,7 +123,7 @@ const FixturePoints = ({ teams, fixtures, predictions }: IFixturePoints) => {
   }, [fixturesWithPoints]);
 
   return (
-    <div className="mx-auto flex w-full max-w-xl flex-col gap-4 overflow-hidden rounded-md">
+    <div className="mx-auto flex w-full max-w-xl flex-col gap-4 overflow-hidden rounded-b-md">
       {fixturesPlayed.length > 0 && <FixtureTable fixtures={fixturesPlayed} />}
       {fixturesNotPlayed.length > 0 && (
         <FixtureTable fixtures={fixturesNotPlayed} />

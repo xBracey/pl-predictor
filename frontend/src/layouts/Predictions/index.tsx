@@ -2,7 +2,6 @@ import { Fixture, Prediction, Team } from "../../../../shared/types/database";
 import { usePredictionStore } from "../../zustand/predictions";
 import { PredictionsPage } from "../../pages/Predictions";
 import Loading from "../../components/Loading";
-import { useMemo } from "react";
 import { usePredictions } from "./usePredictions";
 import { useUserBonuses } from "./useUserBonuses";
 
@@ -30,11 +29,7 @@ export const PredictionsLayout = ({
     onEditPredictions();
   };
 
-  const hasAllPredictions = useMemo(() => {
-    return state.predictions.length === fixtures.length;
-  }, [state.predictions, fixtures]);
-
-  if (!teams || !fixtures || !state.predictions || !hasAllPredictions) {
+  if (!teams || !fixtures || !state.predictions) {
     return (
       <div className="flex w-full items-center justify-center">
         <div>

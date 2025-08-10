@@ -3,12 +3,12 @@ import { Fixture, Prediction, Team } from "../../../../shared/types/database";
 import { usePredictions } from "./usePredictions";
 import { Fragment, useEffect, useState } from "react";
 import Banner from "../../components/Banner";
-import UserBonuses from "../../components/UserBonuses";
+// import UserBonuses from "../../components/UserBonuses";
 import SinglePrediction from "../../components/Prediction/SinglePrediction";
 import PredictionLock from "../../components/PredictionLock";
 
 // TODO fix dynamically
-const predictionLockTime = 1818474400000; // 2024-06-15 20:00:00
+const predictionLockTime = 1918474400000; // 2024-06-15 20:00:00
 
 interface PredictionsPageProps {
   fixtures: Fixture[];
@@ -72,11 +72,11 @@ export const PredictionsPage = ({
         <h2 className="text-2xl font-bold text-white">Predictions</h2>
       </Banner>
 
-      <UserBonuses
+      {/* <UserBonuses
         onEditBonusTeam={onEditBonusTeam}
         teams={teams}
         isPredictionLocked={isPredictionLocked}
-      />
+      /> */}
 
       <div className="mx-auto mt-6 flex w-full max-w-4xl flex-col gap-12">
         {Object.entries(groupFixtures).map(([roundNumber, predictions]) => (
@@ -85,7 +85,7 @@ export const PredictionsPage = ({
               Round {roundNumber}
             </h2>
 
-            <div className="my-4 grid grid-cols-1 gap-4 py-2 md:grid-cols-2 lg:grid-cols-3">
+            <div className="my-4 grid grid-cols-1 gap-4 py-2 md:grid-cols-2">
               {predictions.map((prediction) => (
                 <SinglePrediction
                   key={prediction.fixture.id}
@@ -98,7 +98,7 @@ export const PredictionsPage = ({
               ))}
             </div>
 
-            <PredictionLock isLocked />
+            <PredictionLock isLocked={false} />
           </div>
         ))}
       </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Fixture, Prediction } from "../../../../shared/types/database";
 import { useEditPredictions } from "../../queries/useEditPredictions";
 import { usePredictionStore } from "../../zustand/predictions";
@@ -6,6 +6,7 @@ import { useGetPredictions } from "../../queries/useGetPredictions";
 
 export const useInitPredictions = (fixtures: Fixture[], username: string) => {
   const [firstPredictionLoad, setFirstPredictionLoad] = useState(false);
+  const [timestamp, setTimestamp] = useState(Date.now());
 
   const { dispatch } = usePredictionStore();
 
@@ -48,5 +49,9 @@ export const useInitPredictions = (fixtures: Fixture[], username: string) => {
     }
   };
 
-  useGetPredictions(username, onPredictionSuccess);
+  useEffect(() => {
+    setTimestamp(Date.now());
+  }, [fixtures]);
+
+  useGetPredictions(username, timestamp, onPredictionSuccess);
 };

@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   User,
   Team,
@@ -8,7 +8,6 @@ import {
 import Banner from "../../components/Banner";
 import FixturePoints from "../../components/FixturePoints";
 import LogoutButton from "../../components/LogoutButton";
-// import BonusPoints from "../../components/BonusPoints";
 
 interface ProfilePageProps {
   user: User;
@@ -33,6 +32,29 @@ export const ProfilePage = ({
     return points;
   }, [predictions]);
 
+  const fixturesByRound = useMemo(() => {
+    const rounds: { [round: number]: Fixture[] } = {};
+    fixtures.forEach((fixture) => {
+      const round = fixture.roundNumber;
+      if (!rounds[round]) {
+        rounds[round] = [];
+      }
+      rounds[round].push(fixture);
+    });
+    return rounds;
+  }, [fixtures]);
+
+  const [expandedRounds, setExpandedRounds] = useState<{
+    [round: number]: boolean;
+  }>({});
+
+  const toggleRound = (round: number) => {
+    setExpandedRounds((prev) => ({
+      ...prev,
+      [round]: !prev[round],
+    }));
+  };
+
   return (
     <div>
       <Banner>
@@ -44,12 +66,30 @@ export const ProfilePage = ({
       <div className="my-4 flex flex-col items-center">
         <p className="my-4 text-xl font-bold text-white">{`Total points: ${totalPoints}`}</p>
       </div>
-
-      <FixturePoints
-        fixtures={fixtures}
-        teams={teams}
-        predictions={predictions}
-      />
+      <div className="mx-auto flex w-full max-w-xl flex-col gap-4 overflow-hidden">
+        {Object.keys(fixturesByRound).map((roundKey) => {
+          const round = parseInt(roundKey);
+          return (
+            <div key={round} className="mb-4">
+              <button
+                className={`bg-shamrock-900 w-full p-2 text-lg font-bold text-white ${
+                  expandedRounds[round] ? "rounded-t-md" : "rounded-md"
+                }`}
+                onClick={() => toggleRound(round)}
+              >
+                Round {round}
+              </button>
+              {expandedRounds[round] && (
+                <FixturePoints
+                  fixtures={fixturesByRound[round]}
+                  teams={teams}
+                  predictions={predictions}
+                />
+              )}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

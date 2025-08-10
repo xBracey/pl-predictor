@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, MouseEvent, useState } from "react";
 import { useGetFixture } from "../../../queries/useGetFixture";
 import AdminAddEdit from "../AdminAddEdit";
 import { useGetTeams } from "../../../queries/useGetTeams";
@@ -17,6 +17,7 @@ const FixtureAdmin = ({ id }: IFixtureAdmin) => {
   const { data: fixture, isLoading } = useGetFixture(id);
   const { data: teams, isLoading: isLoadingTeams } = useGetTeams();
   const { postFixture, isLoading: isLoadingFixture } = usePostFixture(id);
+  const [hasReset, setHasReset] = useState(false);
   const navigate = useNavigate();
 
   const form = useForm<Omit<Fixture, "id">>({
@@ -36,6 +37,24 @@ const FixtureAdmin = ({ id }: IFixtureAdmin) => {
       dateTime: values.dateTime ? undefined : "Date is required",
     }),
   });
+
+  const onSubmitAdd = (event: MouseEvent) => {
+    event.preventDefault();
+    console.log("tetgas");
+
+    const roundNumber = form.values.roundNumber;
+    const dateTime = form.values.dateTime;
+
+    postFixture(form.values);
+    form.reset();
+    setHasReset(true);
+
+    setTimeout(() => {
+      setHasReset(false);
+      form.setFieldValue("roundNumber", roundNumber);
+      form.setFieldValue("dateTime", dateTime);
+    }, 50);
+  };
 
   useEffect(() => {
     if (fixture) {
@@ -59,6 +78,8 @@ const FixtureAdmin = ({ id }: IFixtureAdmin) => {
     }));
   }, [teams]);
 
+  if (hasReset) return null;
+
   return (
     <AdminAddEdit
       id={id}
@@ -78,7 +99,7 @@ const FixtureAdmin = ({ id }: IFixtureAdmin) => {
           id="roundNumber"
           label="Round Number"
           required
-          {...form.getInputProps("homeTeamScore")}
+          {...form.getInputProps("roundNumber")}
         />
 
         <Select
@@ -88,6 +109,7 @@ const FixtureAdmin = ({ id }: IFixtureAdmin) => {
           data={teamsOptions}
           {...form.getInputProps("homeTeamId")}
           value={form.values.homeTeamId?.toString()}
+          searchable
         />
 
         <Select
@@ -97,6 +119,7 @@ const FixtureAdmin = ({ id }: IFixtureAdmin) => {
           data={teamsOptions}
           {...form.getInputProps("awayTeamId")}
           value={form.values.awayTeamId?.toString()}
+          searchable
         />
 
         <DateTimePicker
@@ -104,7 +127,7 @@ const FixtureAdmin = ({ id }: IFixtureAdmin) => {
           label="Date"
           required
           {...form.getInputProps("dateTime")}
-          value={new Date(form.values.dateTime ?? 0)}
+          value={new Date(form.values.dateTime ?? Date.now())}
           onChange={(value) =>
             form.setValues({ ...form.values, dateTime: value?.getTime() })
           }
@@ -122,7 +145,14 @@ const FixtureAdmin = ({ id }: IFixtureAdmin) => {
           {...form.getInputProps("awayTeamScore")}
         />
 
-        <Button type="submit">Submit</Button>
+        <div className="flex items-center justify-around">
+          <Button type="submit" color="green">
+            Submit
+          </Button>
+          <Button type="button" onClick={onSubmitAdd} color="blue">
+            Submit & Add Another
+          </Button>
+        </div>
       </form>
     </AdminAddEdit>
   );

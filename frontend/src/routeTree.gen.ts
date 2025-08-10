@@ -17,18 +17,15 @@ import { Route as rootRoute } from './routes/__root'
 // Create Virtual Routes
 
 const RulesLazyImport = createFileRoute('/rules')()
-const RoundPredictionsLazyImport = createFileRoute('/round-predictions')()
 const PredictionsLazyImport = createFileRoute('/predictions')()
 const LogoutLazyImport = createFileRoute('/logout')()
 const LoginLazyImport = createFileRoute('/login')()
 const LeaderboardLazyImport = createFileRoute('/leaderboard')()
-const FixturesLazyImport = createFileRoute('/fixtures')()
 const DashboardLazyImport = createFileRoute('/dashboard')()
 const AboutLazyImport = createFileRoute('/about')()
 const IndexLazyImport = createFileRoute('/')()
 const AdminIndexLazyImport = createFileRoute('/admin/')()
 const ProfileUsernameIndexLazyImport = createFileRoute('/profile/$username/')()
-const LeagueLeagueIdIndexLazyImport = createFileRoute('/league/$leagueId/')()
 const AdminEntityIndexLazyImport = createFileRoute('/admin/$entity/')()
 
 // Create/Update Routes
@@ -37,13 +34,6 @@ const RulesLazyRoute = RulesLazyImport.update({
   path: '/rules',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/rules.lazy').then((d) => d.Route))
-
-const RoundPredictionsLazyRoute = RoundPredictionsLazyImport.update({
-  path: '/round-predictions',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/round-predictions.lazy').then((d) => d.Route),
-)
 
 const PredictionsLazyRoute = PredictionsLazyImport.update({
   path: '/predictions',
@@ -64,11 +54,6 @@ const LeaderboardLazyRoute = LeaderboardLazyImport.update({
   path: '/leaderboard',
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/leaderboard.lazy').then((d) => d.Route))
-
-const FixturesLazyRoute = FixturesLazyImport.update({
-  path: '/fixtures',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() => import('./routes/fixtures.lazy').then((d) => d.Route))
 
 const DashboardLazyRoute = DashboardLazyImport.update({
   path: '/dashboard',
@@ -97,13 +82,6 @@ const ProfileUsernameIndexLazyRoute = ProfileUsernameIndexLazyImport.update({
   import('./routes/profile/$username/index.lazy').then((d) => d.Route),
 )
 
-const LeagueLeagueIdIndexLazyRoute = LeagueLeagueIdIndexLazyImport.update({
-  path: '/league/$leagueId/',
-  getParentRoute: () => rootRoute,
-} as any).lazy(() =>
-  import('./routes/league/$leagueId/index.lazy').then((d) => d.Route),
-)
-
 const AdminEntityIndexLazyRoute = AdminEntityIndexLazyImport.update({
   path: '/admin/$entity/',
   getParentRoute: () => rootRoute,
@@ -127,10 +105,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardLazyImport
       parentRoute: typeof rootRoute
     }
-    '/fixtures': {
-      preLoaderRoute: typeof FixturesLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/leaderboard': {
       preLoaderRoute: typeof LeaderboardLazyImport
       parentRoute: typeof rootRoute
@@ -147,10 +121,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PredictionsLazyImport
       parentRoute: typeof rootRoute
     }
-    '/round-predictions': {
-      preLoaderRoute: typeof RoundPredictionsLazyImport
-      parentRoute: typeof rootRoute
-    }
     '/rules': {
       preLoaderRoute: typeof RulesLazyImport
       parentRoute: typeof rootRoute
@@ -161,10 +131,6 @@ declare module '@tanstack/react-router' {
     }
     '/admin/$entity/': {
       preLoaderRoute: typeof AdminEntityIndexLazyImport
-      parentRoute: typeof rootRoute
-    }
-    '/league/$leagueId/': {
-      preLoaderRoute: typeof LeagueLeagueIdIndexLazyImport
       parentRoute: typeof rootRoute
     }
     '/profile/$username/': {
@@ -180,16 +146,13 @@ export const routeTree = rootRoute.addChildren([
   IndexLazyRoute,
   AboutLazyRoute,
   DashboardLazyRoute,
-  FixturesLazyRoute,
   LeaderboardLazyRoute,
   LoginLazyRoute,
   LogoutLazyRoute,
   PredictionsLazyRoute,
-  RoundPredictionsLazyRoute,
   RulesLazyRoute,
   AdminIndexLazyRoute,
   AdminEntityIndexLazyRoute,
-  LeagueLeagueIdIndexLazyRoute,
   ProfileUsernameIndexLazyRoute,
 ])
 

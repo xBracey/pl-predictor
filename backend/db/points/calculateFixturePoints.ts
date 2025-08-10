@@ -27,6 +27,11 @@ const calculateSingleFixturePoints = (
     return 15;
   }
 
+  // Correct draw prediction 5 points
+  if (phs === pas && fhs === fas) {
+    return 5;
+  }
+
   // Correct winner 5 points
   if ((phs > pas && fhs > fas) || (phs < pas && fhs < fas)) {
     return 5;

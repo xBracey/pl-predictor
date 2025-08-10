@@ -4,7 +4,7 @@
   "description": "",
   "scripts": {
     "start": "ts-node ./index.ts",
-    "dev": "watchexec -r 'npm start'",
+    "dev": "onchange -i -k 'db/**/*.ts' -- npm run start",
     "migrate": "ts-node ./db/migrate.ts",
     "migration": "drizzle-kit generate:sqlite",
     "migration-empty": "drizzle-kit generate:sqlite --custom"
@@ -24,6 +24,7 @@
     "@types/better-sqlite3": "^7.6.9",
     "@types/node": "^20.11.10",
     "drizzle-kit": "^0.20.13",
+    "onchange": "^7.1.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }

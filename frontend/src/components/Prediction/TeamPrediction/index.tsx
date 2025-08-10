@@ -4,6 +4,8 @@ interface IPredictionButton {
   disabled?: boolean;
 }
 
+const transformName = (name: string) => name.replace(/\s/g, "_");
+
 const PredictionButton = ({
   onClick,
   children,
@@ -23,6 +25,7 @@ interface ITeamPrediction {
   score: number;
   incrementScore: () => void;
   decrementScore: () => void;
+  inverted?: boolean;
 }
 
 const TeamPrediction = ({
@@ -30,10 +33,22 @@ const TeamPrediction = ({
   score,
   incrementScore,
   decrementScore,
+  inverted = false,
 }: ITeamPrediction) => (
-  <div className="text-shamrock-950 flex flex-col items-center">
-    <span className="text-lg font-bold">{teamName}</span>
-    <div className="flex items-center gap-5">
+  <div className="text-shamrock-950 flex flex-1 flex-col items-center">
+    <div
+      className={`flex items-center justify-center gap-2 p-2 ${
+        inverted ? "flex-row-reverse" : "flex-row"
+      }`}
+    >
+      <span className="text-base font-bold">{teamName}</span>
+      <img
+        src={`/logos/${transformName(teamName)}.png`}
+        alt={teamName}
+        className="h-8 w-8"
+      />
+    </div>
+    <div className="flex w-full items-center justify-around px-1">
       <PredictionButton onClick={decrementScore} disabled={score === 0}>
         -
       </PredictionButton>

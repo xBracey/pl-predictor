@@ -10,10 +10,11 @@ export const getPredictions = async (username: string) => {
 
 export const useGetPredictions = (
   username: string,
+  timestamp: number,
   onSuccess?: (predictions: Prediction[]) => void
 ) => {
   const query = useQuery(
-    ["getPredictions", username],
+    ["getPredictions", username, timestamp],
     () => getPredictions(username),
     {
       onSuccess,

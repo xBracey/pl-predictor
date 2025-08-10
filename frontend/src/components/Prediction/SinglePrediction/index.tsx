@@ -57,6 +57,7 @@ const SinglePrediction: React.FC<SinglePredictionProps> = ({
           score={awayTeamScore}
           incrementScore={incrementAwayScore}
           decrementScore={decrementAwayScore}
+          inverted
         />
       </div>
     </div>
