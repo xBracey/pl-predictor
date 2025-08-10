@@ -1,14 +1,23 @@
 import { useQuery } from "react-query";
 import { apiRequest } from "./utils";
 
-export const getLeaderboard = async () => {
-  return apiRequest(`/leaderboard`, {
+type TimePeriod = "monthly" | "all-time";
+
+export interface LeaderboardEntry {
+  username: string;
+  totalPoints: number;
+}
+
+export const getLeaderboard = async (timePeriod: TimePeriod) => {
+  return apiRequest<LeaderboardEntry[]>(`/leaderboard/${timePeriod}`, {
     method: "GET",
   });
 };
 
-export const useGetLeaderboard = () => {
-  const query = useQuery(["getLeaderboard"], () => getLeaderboard());
+export const useGetLeaderboard = (timePeriod: TimePeriod) => {
+  const query = useQuery(["getLeaderboard", timePeriod], () =>
+    getLeaderboard(timePeriod)
+  );
 
   return { ...query, data: query.data || [] };
 };

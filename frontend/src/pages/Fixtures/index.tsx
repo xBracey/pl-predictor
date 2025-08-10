@@ -5,6 +5,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Lock } from "../../components/Icons/Icons";
 import Loading from "../../components/Loading";
 import Banner from "../../components/Banner";
+import useRoundManagement from "../../utils/useRoundManagement";
 
 interface FixturesPageProps {
   teams: Team[];
@@ -13,6 +14,10 @@ interface FixturesPageProps {
 }
 
 const FixturesPage = ({ teams, fixtures, isLoading }: FixturesPageProps) => {
+  const { groupedFixtures, openRound, toggleRound } = useRoundManagement({
+    fixtures,
+  });
+
   const [currentTime, setCurrentTime] = useState(Date.now());
 
   useEffect(() => {
@@ -21,53 +26,6 @@ const FixturesPage = ({ teams, fixtures, isLoading }: FixturesPageProps) => {
     }, 5000);
     return () => clearInterval(interval);
   }, []);
-
-  const groupedFixtures = useMemo(() => {
-    if (!fixtures) return {};
-
-    return fixtures.reduce((acc: { [key: number]: Fixture[] }, fixture) => {
-      if (!acc[fixture.roundNumber]) {
-        acc[fixture.roundNumber] = [];
-      }
-      acc[fixture.roundNumber].push(fixture);
-      return acc;
-    }, {});
-  }, [fixtures]);
-
-  const [openRound, setOpenRound] = useState<number | null>(null);
-
-  // Determine which round should be open by default
-  const defaultOpenRound = useMemo(() => {
-    if (!fixtures) return null;
-
-    // Check for live rounds
-    for (const roundNumber in groupedFixtures) {
-      const roundFixtures = groupedFixtures[roundNumber];
-      if (roundFixtures.length === 0) continue;
-
-      const firstFixtureTime = Math.min(
-        ...roundFixtures.map((f) => f.dateTime)
-      );
-      const lastFixtureTime = Math.max(...roundFixtures.map((f) => f.dateTime));
-
-      if (currentTime >= firstFixtureTime && currentTime <= lastFixtureTime) {
-        return Number(roundNumber);
-      }
-    }
-
-    // If no round is live, return the first round
-    return Number(Object.keys(groupedFixtures)[0]);
-  }, [groupedFixtures, currentTime, fixtures]);
-
-  useEffect(() => {
-    setOpenRound(defaultOpenRound);
-  }, [defaultOpenRound]);
-
-  const toggleRound = (roundNumber: number) => {
-    setOpenRound((prevRound) =>
-      prevRound === roundNumber ? null : roundNumber
-    );
-  };
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -81,7 +39,6 @@ const FixturesPage = ({ teams, fixtures, isLoading }: FixturesPageProps) => {
         Object.entries(groupedFixtures).map(([roundNumber, roundFixtures]) => {
           const isRoundOpen = openRound === Number(roundNumber);
 
-          // Determine if the round is locked (all fixtures in the round have passed)
           const isLocked = roundFixtures.every(
             (fixture) => fixture.dateTime < currentTime
           );

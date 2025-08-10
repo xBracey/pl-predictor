@@ -5,6 +5,7 @@ import { Fragment, useEffect, useState, useMemo } from "react";
 import Banner from "../../components/Banner";
 import { RoundPredictions } from "../../components/RoundPredictions";
 import { LockTime } from "../../queries/useGetGroupLockTimes";
+import useRoundManagement from "../../utils/useRoundManagement";
 
 interface PredictionsPageProps {
   fixtures: Fixture[];
@@ -42,40 +43,9 @@ export const PredictionsPage = ({
     return () => clearInterval(interval);
   }, []);
 
-  const openRound = useMemo(() => {
-    // Find the "live" round, if any
-    let openRound: string | null = null;
-    for (const roundNumber in groupFixtures) {
-      const predictions = groupFixtures[roundNumber];
-
-      if (predictions.length === 0) continue;
-
-      const firstFixtureTime = Math.min(
-        ...predictions.map((p) => p.fixture.dateTime)
-      );
-      const lastFixtureTime = Math.max(
-        ...predictions.map((p) => p.fixture.dateTime)
-      );
-
-      if (currentTime >= firstFixtureTime && currentTime <= lastFixtureTime) {
-        return roundNumber;
-      }
-    }
-
-    // If no round is live, find the earliest unlocked round
-    for (const roundNumber in groupFixtures) {
-      const lockTime = groupLockTimes.find(
-        (lockTime) => lockTime.roundNumber === Number(roundNumber)
-      )?.predictionLockTime;
-
-      if (!lockTime || currentTime < lockTime) {
-        openRound = roundNumber;
-        break;
-      }
-    }
-
-    return openRound;
-  }, [currentTime, groupFixtures, groupLockTimes]);
+  const { openRound } = useRoundManagement({
+    fixtures,
+  });
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -106,7 +76,7 @@ export const PredictionsPage = ({
           (lockTime) => lockTime.roundNumber === Number(roundNumber)
         )?.predictionLockTime;
 
-        const isOpenByDefault = roundNumber === openRound;
+        const isOpenByDefault = Number(roundNumber) === openRound;
 
         return (
           <RoundPredictions
