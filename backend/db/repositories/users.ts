@@ -50,3 +50,7 @@ export const editUserBonuses = (username: string, bonusTeamId: number) => {
     .where(eq(users.username, username))
     .execute();
 };
+
+export const deleteUser = async (username: string) => {
+  return db.delete(users).where(eq(users.username, username)).execute();
+};

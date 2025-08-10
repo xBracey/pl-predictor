@@ -4,11 +4,13 @@ import { useGetFixtures } from "../queries/useGetFixtures";
 import { useGetMe } from "../queries/useGetMe";
 import Loading from "../components/Loading";
 import { PredictionsLayout } from "../layouts/Predictions";
+import { useGetGroupLockTimes } from "../queries/useGetGroupLockTimes";
 
 const Predictions = () => {
   const { data: user, isLoading: userIsLoading } = useGetMe();
   const { data: teams } = useGetTeams();
   const { data: fixtures } = useGetFixtures();
+  const { data: groupLockTimes } = useGetGroupLockTimes();
 
   if (userIsLoading) {
     return <Loading />;
@@ -23,6 +25,7 @@ const Predictions = () => {
       username={user.username}
       teams={teams}
       fixtures={fixtures}
+      groupLockTimes={groupLockTimes}
     />
   );
 };

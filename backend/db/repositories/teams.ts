@@ -16,3 +16,7 @@ export const insertTeam = (team: InsertTeam) => {
 export const editTeam = (id: number, team: InsertTeam) => {
   return db.update(teams).set(team).where(eq(teams.id, id)).execute();
 };
+
+export const deleteTeam = async (id: number) => {
+  return db.delete(teams).where(eq(teams.id, id)).execute();
+};

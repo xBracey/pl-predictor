@@ -1,4 +1,10 @@
-import { editTeam, getTeam, getTeams, insertTeam } from "../repositories/teams";
+import {
+  editTeam,
+  getTeam,
+  getTeams,
+  insertTeam,
+  deleteTeam,
+} from "../repositories/teams";
 import { ServiceHandler } from "./types";
 
 export const getTeamsHandler: ServiceHandler = async (_, reply) => {
@@ -33,4 +39,12 @@ export const editTeamHandler: ServiceHandler = async (request, reply) => {
   await editTeam(parseInt(id), { name });
 
   reply.send({ name });
+};
+
+export const deleteTeamHandler: ServiceHandler = async (request, reply) => {
+  const { id } = request.params as { id: string };
+
+  await deleteTeam(parseInt(id));
+
+  reply.send({ message: "Team deleted" });
 };

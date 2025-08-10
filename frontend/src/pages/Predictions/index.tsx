@@ -1,14 +1,10 @@
 import { Dialog, Loader } from "@mantine/core";
 import { Fixture, Prediction, Team } from "../../../../shared/types/database";
 import { usePredictions } from "./usePredictions";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useEffect, useState, useMemo } from "react";
 import Banner from "../../components/Banner";
-// import UserBonuses from "../../components/UserBonuses";
-import SinglePrediction from "../../components/Prediction/SinglePrediction";
-import PredictionLock from "../../components/PredictionLock";
-
-// TODO fix dynamically
-const predictionLockTime = 1918474400000; // 2024-06-15 20:00:00
+import { RoundPredictions } from "../../components/RoundPredictions";
+import { LockTime } from "../../queries/useGetGroupLockTimes";
 
 interface PredictionsPageProps {
   fixtures: Fixture[];
@@ -18,7 +14,7 @@ interface PredictionsPageProps {
   onPredictionChange: (prediction: Prediction) => void;
   isSavingPrediction: boolean;
   isError: boolean;
-  onEditBonusTeam: (teamId: number) => void;
+  groupLockTimes: LockTime[];
 }
 
 export const PredictionsPage = ({
@@ -29,7 +25,7 @@ export const PredictionsPage = ({
   onPredictionChange,
   isSavingPrediction,
   isError,
-  onEditBonusTeam,
+  groupLockTimes,
 }: PredictionsPageProps) => {
   const [currentTime, setCurrentTime] = useState(Date.now());
 
@@ -46,7 +42,40 @@ export const PredictionsPage = ({
     return () => clearInterval(interval);
   }, []);
 
-  const isPredictionLocked = currentTime > predictionLockTime || true;
+  const openRound = useMemo(() => {
+    // Find the "live" round, if any
+    let openRound: string | null = null;
+    for (const roundNumber in groupFixtures) {
+      const predictions = groupFixtures[roundNumber];
+
+      if (predictions.length === 0) continue;
+
+      const firstFixtureTime = Math.min(
+        ...predictions.map((p) => p.fixture.dateTime)
+      );
+      const lastFixtureTime = Math.max(
+        ...predictions.map((p) => p.fixture.dateTime)
+      );
+
+      if (currentTime >= firstFixtureTime && currentTime <= lastFixtureTime) {
+        return roundNumber;
+      }
+    }
+
+    // If no round is live, find the earliest unlocked round
+    for (const roundNumber in groupFixtures) {
+      const lockTime = groupLockTimes.find(
+        (lockTime) => lockTime.roundNumber === Number(roundNumber)
+      )?.predictionLockTime;
+
+      if (!lockTime || currentTime < lockTime) {
+        openRound = roundNumber;
+        break;
+      }
+    }
+
+    return openRound;
+  }, [currentTime, groupFixtures, groupLockTimes]);
 
   return (
     <div className="flex flex-col items-center justify-center">
@@ -72,36 +101,26 @@ export const PredictionsPage = ({
         <h2 className="text-2xl font-bold text-white">Predictions</h2>
       </Banner>
 
-      {/* <UserBonuses
-        onEditBonusTeam={onEditBonusTeam}
-        teams={teams}
-        isPredictionLocked={isPredictionLocked}
-      /> */}
+      {Object.entries(groupFixtures).map(([roundNumber, predictions]) => {
+        const lockTime = groupLockTimes.find(
+          (lockTime) => lockTime.roundNumber === Number(roundNumber)
+        )?.predictionLockTime;
 
-      <div className="mx-auto mt-6 flex w-full max-w-4xl flex-col gap-12">
-        {Object.entries(groupFixtures).map(([roundNumber, predictions]) => (
-          <div className="flex flex-col gap-2" key={roundNumber}>
-            <h2 className="text-center text-2xl font-bold text-white">
-              Round {roundNumber}
-            </h2>
+        const isOpenByDefault = roundNumber === openRound;
 
-            <div className="my-4 grid grid-cols-1 gap-4 py-2 md:grid-cols-2">
-              {predictions.map((prediction) => (
-                <SinglePrediction
-                  key={prediction.fixture.id}
-                  homeTeam={prediction.homeTeam}
-                  awayTeam={prediction.awayTeam}
-                  username={username}
-                  prediction={prediction.prediction}
-                  onChange={onEditPrediction}
-                />
-              ))}
-            </div>
-
-            <PredictionLock isLocked={false} />
-          </div>
-        ))}
-      </div>
+        return (
+          <RoundPredictions
+            key={roundNumber}
+            roundNumber={roundNumber}
+            predictions={predictions}
+            lockTime={lockTime}
+            currentTime={currentTime}
+            username={username}
+            onEditPrediction={onEditPrediction}
+            isOpenByDefault={isOpenByDefault}
+          />
+        );
+      })}
     </div>
   );
 };

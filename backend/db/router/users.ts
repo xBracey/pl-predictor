@@ -6,6 +6,7 @@ import {
   getUsersHandler,
   loginUserHandler,
   registerUserHandler,
+  deleteUserHandler,
 } from "../services/users";
 import { Router } from "./types";
 
@@ -17,5 +18,6 @@ export const buildUserRoutes: Router = (fastify, _, done) => {
   fastify.post("/register", registerUserHandler(fastify));
   fastify.post("/login", loginUserHandler(fastify));
   fastify.put("/:username", editUserHandler);
+  fastify.delete("/:username", deleteUserHandler);
   done();
 };

@@ -7,12 +7,21 @@ import AdminEntity from "../../components/Admin/AdminEntity";
 import { useMemo } from "react";
 import dayjs from "dayjs";
 import Loading from "../../components/Loading";
+import { useDeleteFixture } from "../../queries/useDeleteFixture";
+import { useDeleteTeam } from "../../queries/useDeleteTeam";
+import { useDeleteUser } from "../../queries/useDeleteUser";
 
 const Admin = () => {
   const { data: user, isLoading: userIsLoading } = useGetMe();
   const { data: teams } = useGetTeams();
   const { data: fixtures } = useGetFixtures();
   const { data: users } = useGetUsers();
+
+  const onDeleteSuccess = () => window.location.reload();
+
+  const { mutate: deleteFixture } = useDeleteFixture(onDeleteSuccess);
+  const { mutate: deleteTeam } = useDeleteTeam(onDeleteSuccess);
+  const { mutate: deleteUser } = useDeleteUser(onDeleteSuccess);
 
   const fixuresWithNames = useMemo(() => {
     return fixtures.map((fixture) => {
@@ -38,19 +47,16 @@ const Admin = () => {
     return <Navigate to="/" />;
   }
 
-  const onUserDelete = (userId: string | number) => {
-    // TODO: Delete user
-    console.log(`Deleting user ${userId}`);
+  const onUserDelete = (username: string) => {
+    deleteUser({ username: username });
   };
 
   const onTeamDelete = (teamId: string | number) => {
-    // TODO: Delete team
-    console.log(`Deleting team ${teamId}`);
+    deleteTeam({ id: Number(teamId) });
   };
 
   const onFixtureDelete = (fixtureId: string | number) => {
-    // TODO: Delete fixture
-    console.log(`Deleting fixture ${fixtureId}`);
+    deleteFixture({ id: Number(fixtureId) });
   };
 
   return (

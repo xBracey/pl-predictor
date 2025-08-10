@@ -59,6 +59,9 @@ const Header = ({ scrollToTop }: { scrollToTop: () => void }) => {
 
           {user && (
             <Fragment>
+              <HeaderLink to="/fixtures" closeMenu={closeMenu}>
+                Fixtures
+              </HeaderLink>
               <HeaderLink to="/predictions" closeMenu={closeMenu}>
                 Predictions
               </HeaderLink>

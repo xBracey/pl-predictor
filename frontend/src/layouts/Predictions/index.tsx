@@ -3,23 +3,24 @@ import { usePredictionStore } from "../../zustand/predictions";
 import { PredictionsPage } from "../../pages/Predictions";
 import Loading from "../../components/Loading";
 import { usePredictions } from "./usePredictions";
-import { useUserBonuses } from "./useUserBonuses";
+import { LockTime } from "../../queries/useGetGroupLockTimes";
 
 interface PredictionsLayoutProps {
   username: string;
   teams: Team[];
   fixtures: Fixture[];
+  groupLockTimes: LockTime[];
 }
 
 export const PredictionsLayout = ({
   username,
   teams,
   fixtures,
+  groupLockTimes,
 }: PredictionsLayoutProps) => {
   const { state, dispatch } = usePredictionStore();
 
   const { onEditPredictions, isError } = usePredictions(fixtures, username);
-  const { onEditBonusTeam } = useUserBonuses();
 
   const onPredictionChange = (prediction: Prediction) => {
     dispatch({
@@ -51,7 +52,7 @@ export const PredictionsLayout = ({
         (prediction) => prediction.saved === false
       )}
       isError={isError}
-      onEditBonusTeam={onEditBonusTeam}
+      groupLockTimes={groupLockTimes}
     />
   );
 };

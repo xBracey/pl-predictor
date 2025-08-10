@@ -4,6 +4,7 @@ import {
   getTeamHandler,
   getTeamsHandler,
   insertTeamsHandler,
+  deleteTeamHandler,
 } from "../services/teams";
 
 export const buildTeamsRoutes: Router = (fastify, _, done) => {
@@ -11,5 +12,6 @@ export const buildTeamsRoutes: Router = (fastify, _, done) => {
   fastify.post("/", insertTeamsHandler);
   fastify.get("/:id", getTeamHandler);
   fastify.put("/:id", editTeamHandler);
+  fastify.delete("/:id", deleteTeamHandler);
   done();
 };

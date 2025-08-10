@@ -5,6 +5,7 @@ import {
   getUser,
   getUsers,
   insertUser,
+  deleteUser,
 } from "../repositories/users";
 import { ServiceHandler } from "./types";
 import bcrypt from "bcrypt";
@@ -123,3 +124,11 @@ export const editMyBonuses: (server: FastifyInstance) => ServiceHandler =
 
     reply.send({ bonusTeamId });
   };
+
+export const deleteUserHandler: ServiceHandler = async (request, reply) => {
+  const { username } = request.params as { username: string };
+
+  await deleteUser(username);
+
+  reply.send({ message: "User deleted" });
+};

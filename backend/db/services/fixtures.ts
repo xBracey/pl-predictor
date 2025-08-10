@@ -3,6 +3,8 @@ import {
   getFixture,
   getFixtures,
   insertFixture,
+  deleteFixture,
+  getAllGroupFixturesPredictionLockTime,
 } from "../repositories/fixtures";
 import { ServiceHandler } from "./types";
 
@@ -49,4 +51,17 @@ export const editFixtureHandler: ServiceHandler = async (request, reply) => {
   await editFixture(parseInt(id), data);
 
   reply.send(data);
+};
+
+export const getGroupLockTimesHandler: ServiceHandler = async (_, reply) => {
+  const lockTimes = await getAllGroupFixturesPredictionLockTime();
+  reply.send(lockTimes);
+};
+
+export const deleteFixtureHandler: ServiceHandler = async (request, reply) => {
+  const { id } = request.params as { id: string };
+
+  await deleteFixture(parseInt(id));
+
+  reply.send({ message: "Fixture deleted" });
 };

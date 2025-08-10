@@ -1,19 +1,22 @@
 import React from "react";
 import { Prediction, Team } from "../../../../../shared/types/database";
 import TeamPrediction from "../TeamPrediction";
+import { format } from "date-fns";
 
 interface SinglePredictionProps {
   homeTeam: Team;
   awayTeam: Team;
   username: string;
   prediction: Omit<Prediction, "username">;
-  onChange: (Prediction: Omit<Prediction, "username">) => void;
+  dateTime: number;
+  onChange: (prediction: Omit<Prediction, "username">) => void;
 }
 
 const SinglePrediction: React.FC<SinglePredictionProps> = ({
   homeTeam,
   awayTeam,
   prediction,
+  dateTime,
   onChange,
 }) => {
   const { homeTeamScore, awayTeamScore } = prediction;
@@ -42,23 +45,29 @@ const SinglePrediction: React.FC<SinglePredictionProps> = ({
       awayTeamScore: Math.max(0, awayTeamScore - 1),
     });
 
+  const formattedTime = format(dateTime, "do MMM HH:mm");
+
   return (
     <div className="flex w-full justify-center md:w-auto">
-      <div className="bg-shamrock-400 flex w-full items-center justify-around gap-4 rounded-md p-2 px-4">
-        <TeamPrediction
-          teamName={homeTeam.name}
-          score={homeTeamScore}
-          incrementScore={incrementHomeScore}
-          decrementScore={decrementHomeScore}
-        />
-
-        <TeamPrediction
-          teamName={awayTeam.name}
-          score={awayTeamScore}
-          incrementScore={incrementAwayScore}
-          decrementScore={decrementAwayScore}
-          inverted
-        />
+      <div className="bg-shamrock-400 flex w-full flex-col items-center justify-around gap-1 rounded-md p-2 px-4">
+        <div className="text-shamrock-950 text-center text-sm font-semibold">
+          {formattedTime}
+        </div>
+        <div className="flex w-full">
+          <TeamPrediction
+            teamName={homeTeam.name}
+            score={homeTeamScore}
+            incrementScore={incrementHomeScore}
+            decrementScore={decrementHomeScore}
+          />
+          <TeamPrediction
+            teamName={awayTeam.name}
+            score={awayTeamScore}
+            incrementScore={incrementAwayScore}
+            decrementScore={decrementAwayScore}
+            inverted
+          />
+        </div>
       </div>
     </div>
   );

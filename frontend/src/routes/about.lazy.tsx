@@ -3,8 +3,6 @@ import Banner from "../components/Banner";
 import Box from "../components/Box";
 
 const About = () => {
-  // TODO update
-
   return (
     <div className="flex flex-col items-center justify-center">
       <Banner>
@@ -15,22 +13,25 @@ const About = () => {
         <Box className="flex flex-col gap-4 text-center">
           <h2 className="text-2xl font-bold">What is FootyBee?</h2>
           <p>
-            FootyBee is a Euro 2024 football prediction platform. As a user, you
-            can make predictions on matches, create and join leagues with
-            friends, and compete on our global leaderboard.
+            Welcome to FootyBee, a Premier League football predictor where you
+            can make predictions on games and create and join leagues with your
+            friends.
           </p>
           <p>
-            Earn points by correctly predicting match results, team
-            qualifications, and other outcomes. FootyBee is a full-stack app
-            built with React, TypeScript, and Node, and you can find the source
-            code on GitHub:{" "}
+            Predict results every gameweek in the 2025-26 Premier League season.
+            Earn points by correctly predicting match results and compete with
+            friends in private leagues or on our global leaderboard.
+          </p>
+          <p>
+            FootyBee is a full-stack app built with React, TypeScript, and Node,
+            and you can find the source code on GitHub:{" "}
             <a
-              href="https://github.com/xBracey/footybee-new"
+              href="https://github.com/xBracey/pl-predictor"
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-500 hover:text-blue-700"
             >
-              https://github.com/xBracey/footybee-new
+              https://github.com/xBracey/pl-predictor
             </a>
           </p>
         </Box>
@@ -50,27 +51,30 @@ const About = () => {
               who started a mini-league among his friends during the Euros six
               years ago. We made predictions on match results and team
               qualifications, earning points for correct guesses, with a prize
-              pool to keep things exciting.{" "}
+              pool to keep things exciting.
             </p>
             <p>
               Two years later, we repeated the experience for the World Cup. As
               a newly graduated computer science student, I attempted to build a
               website to manage the whole process. Underestimating the
               complexity, I ended up with a half-finished, basic-looking site
-              that only lasted through the group stages.{" "}
+              that only lasted through the group stages.
             </p>
             <p>
               Fast forward another two years, and with more web dev experience
               under my belt, I decided to expand on the original idea. As
               someone who likes a challenge, I set out to create a full-stack
               app where multiple leagues could coexist on a single site, with
-              separate prediction rounds for the group and knockout stages.{" "}
+              separate prediction rounds for the group and knockout stages.
             </p>
             <p>
-              Now, in the present day, after revisiting my code from two years
-              ago, I've redesigned and re-architected everything, focusing on a
-              simple, easy-to-use web app that can be served as a Progressive
-              Web App (PWA) on your phone.
+              For the 2024 FootyBee, I'd redesigned and re-architected
+              everything, focusing on a simple, easy-to-use web app that can be
+              served as a Progressive Web App (PWA) on your phone.
+            </p>
+            <p>
+              Now the current site is a reskinned and enhanced version of that
+              2024 app, adapted for the Premier League format.
             </p>
           </Box>
         </div>

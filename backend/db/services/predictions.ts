@@ -2,13 +2,12 @@ import { FastifyInstance } from "fastify";
 import {
   getPredictionsByUsername,
   insertPredictions,
+  insertRoundPredictions,
 } from "../repositories/predictions";
 import { ServiceHandler } from "./types";
 import { tokenToUser } from "./utils";
 import { InsertPrediction } from "../schema";
-
-// TODO sort out
-const predictionLockTime = 1918474400000; // 2024-06-15 20:00:00
+import { getFixture } from "../repositories/fixtures";
 
 export const getPredictionsHandler: ServiceHandler = async (req, reply) => {
   const { username } = req.params as { username: string };
@@ -27,16 +26,37 @@ export const insertPredictionsHandler: (
     return;
   }
 
-  if (Date.now() > predictionLockTime) {
-    reply.status(403).send({ error: "Predictions are locked" });
-    return;
-  }
-
-  const { username } = userDecoded;
-
   const predictions = req.body as InsertPrediction[];
 
-  await insertPredictions(username, predictions);
+  const predictionsByRound = new Map<number, InsertPrediction[]>();
+  for (const prediction of predictions) {
+    const fixture = await getFixture(prediction.fixtureId!);
+    if (!fixture) {
+      reply
+        .status(400)
+        .send({ error: `Fixture with id ${prediction.fixtureId} not found` });
+      return;
+    }
+    const roundNumber = fixture.roundNumber!;
+    if (!predictionsByRound.has(roundNumber)) {
+      predictionsByRound.set(roundNumber, []);
+    }
+    predictionsByRound.get(roundNumber)!.push(prediction);
+  }
 
-  reply.send(predictions.map((prediction) => ({ ...prediction, username })));
+  // Insert predictions for each round
+  for (const [roundNumber, roundPredictions] of predictionsByRound) {
+    await insertRoundPredictions(
+      userDecoded.username,
+      roundNumber,
+      roundPredictions
+    );
+  }
+
+  reply.send(
+    predictions.map((prediction) => ({
+      ...prediction,
+      username: userDecoded.username,
+    }))
+  );
 };

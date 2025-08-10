@@ -22,22 +22,6 @@ const FixtureList = ({ teams, fixtures }: IFixtureList) => {
         awayTeam,
         homeScore: fixture.homeTeamScore,
         awayScore: fixture.awayTeamScore,
-        homeTeamExtraTimeScore:
-          "homeTeamExtraTimeScore" in fixture
-            ? fixture.homeTeamExtraTimeScore
-            : undefined,
-        awayTeamExtraTimeScore:
-          "awayTeamExtraTimeScore" in fixture
-            ? fixture.awayTeamExtraTimeScore
-            : undefined,
-        homeTeamPenaltiesScore:
-          "homeTeamPenaltiesScore" in fixture
-            ? fixture.homeTeamPenaltiesScore
-            : undefined,
-        awayTeamPenaltiesScore:
-          "awayTeamPenaltiesScore" in fixture
-            ? fixture.awayTeamPenaltiesScore
-            : undefined,
       };
     });
 
@@ -45,10 +29,26 @@ const FixtureList = ({ teams, fixtures }: IFixtureList) => {
     return dataSorted;
   }, [fixtures, teams]);
 
+  if (fixtures.length === 1) {
+    const fixture = fixturesWithTeams[0];
+
+    return (
+      <div className="p-6">
+        <FixtureComponent
+          key={`${fixture.homeTeam}-${fixture.awayTeam}`}
+          homeTeam={fixture.homeTeam}
+          awayTeam={fixture.awayTeam}
+          homeScore={fixture.homeScore}
+          awayScore={fixture.awayScore}
+          dateTime={fixture.dateTime}
+        />
+      </div>
+    );
+  }
   return (
-    <div className="flex flex-wrap items-center justify-center">
+    <div className="bg-pine-green-800 grid w-full grid-cols-1 items-center justify-center gap-6 p-6 md:grid-cols-2">
       {fixturesWithTeams.map((fixture) => (
-        <div className="w-full p-2 md:w-1/2 lg:w-1/3">
+        <div className="w-full">
           <FixtureComponent
             key={`${fixture.homeTeam}-${fixture.awayTeam}`}
             homeTeam={fixture.homeTeam}

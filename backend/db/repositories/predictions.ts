@@ -1,6 +1,7 @@
 import { and, eq, sql } from "drizzle-orm";
 import { db } from "..";
-import { InsertPrediction, predictions } from "../schema";
+import { InsertPrediction, predictions, fixtures } from "../schema";
+import { getGroupFixturesPredictionLockTime } from "./fixtures";
 
 export const getPredictionsByUsername = (username: string) =>
   db
@@ -28,6 +29,22 @@ export const insertPredictions = (
       },
     })
     .execute();
+};
+
+export const insertRoundPredictions = async (
+  username: string,
+  roundNumber: number,
+  predictionsRaw: InsertPrediction[]
+) => {
+  const predictionLockTime = await getGroupFixturesPredictionLockTime(
+    roundNumber
+  );
+
+  if (Date.now() > predictionLockTime) {
+    return;
+  }
+
+  return insertPredictions(username, predictionsRaw);
 };
 
 export const editPrediction = (
