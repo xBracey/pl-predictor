@@ -27,7 +27,7 @@ const Leaderboard = () => {
       <div className="mx-auto flex w-full max-w-xl flex-col gap-4 overflow-hidden py-4">
         <LeaderboardComponent
           leaderboard={leaderboard}
-          currentUsername={user.username}
+          currentUsername={user?.username}
         />
       </div>
     </div>
