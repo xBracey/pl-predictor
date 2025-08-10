@@ -52,7 +52,7 @@ const Leaderboard = ({
           >
             <p className="w-16 md:w-20">{index + 1}</p>
             <p className="flex-1">{user.username}</p>
-            <p className="w-16 md:w-20">{user.totalPoints}</p>
+            <p className="w-16 md:w-20">{user.totalPoints ?? 0}</p>
           </div>
         </UserComponentWrap>
       ))}
