@@ -45,7 +45,7 @@ const TeamPrediction = ({
       <img
         src={`/logos/${transformName(teamName)}.png`}
         alt={teamName}
-        className="h-8 w-8"
+        className="h-8 w-8 object-contain"
       />
     </div>
     <div className="flex w-full items-center justify-around px-1">

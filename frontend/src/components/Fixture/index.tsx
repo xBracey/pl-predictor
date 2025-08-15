@@ -27,7 +27,7 @@ const Fixture = ({
         <img
           src={`/logos/${transformName(homeTeam)}.png`}
           alt={homeTeam}
-          className="h-10 w-10"
+          className="h-10 w-10 object-contain"
         />
         <p>{isProfilePage ? homeTeam.slice(0, 3).toUpperCase() : homeTeam}</p>
         {homeScore !== undefined && awayScore !== undefined ? (
@@ -45,7 +45,7 @@ const Fixture = ({
         <img
           src={`/logos/${transformName(awayTeam)}.png`}
           alt={awayTeam}
-          className="h-10 w-10"
+          className="h-10 w-10 object-contain"
         />
       </div>
       {hasDate && (
