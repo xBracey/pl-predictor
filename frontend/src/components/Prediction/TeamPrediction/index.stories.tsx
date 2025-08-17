@@ -7,6 +7,7 @@ export const TeamPredictionStory: Story = () => (
     score={0}
     incrementScore={() => {}}
     decrementScore={() => {}}
+    logo=""
   />
 );
 

@@ -5,6 +5,8 @@ import FixtureComponent from "../Fixture";
 interface FixturesWithPoints {
   homeTeam: string;
   awayTeam: string;
+  homeTeamLogo: string;
+  awayTeamLogo: string;
   homeScore: number;
   awayScore: number;
   dateTime: number;
@@ -65,6 +67,8 @@ const FixtureTable = ({ fixtures }: { fixtures: FixturesWithPoints[] }) => (
           <FixtureComponent
             homeTeam={fixture.homeTeam}
             awayTeam={fixture.awayTeam}
+            homeTeamLogo={fixture.homeTeamLogo}
+            awayTeamLogo={fixture.awayTeamLogo}
             homeScore={fixture.homeScore}
             awayScore={fixture.awayScore}
             dateTime={fixture.dateTime}
@@ -88,20 +92,18 @@ const FixtureTable = ({ fixtures }: { fixtures: FixturesWithPoints[] }) => (
 const FixturePoints = ({ teams, fixtures, predictions }: IFixturePoints) => {
   const fixturesWithPoints = useMemo(() => {
     return fixtures.map((fixture) => {
-      const homeTeam = teams.find(
-        (team) => team.id === fixture.homeTeamId
-      )?.name;
-      const awayTeam = teams.find(
-        (team) => team.id === fixture.awayTeamId
-      )?.name;
+      const homeTeam = teams.find((team) => team.id === fixture.homeTeamId);
+      const awayTeam = teams.find((team) => team.id === fixture.awayTeamId);
       const prediction = predictions.find(
         (prediction) => prediction.fixtureId === fixture.id
       );
       return {
-        homeTeam,
-        awayTeam,
+        homeTeam: homeTeam.name,
+        awayTeam: awayTeam.name,
         homeScore: fixture.homeTeamScore,
         awayScore: fixture.awayTeamScore,
+        homeTeamLogo: homeTeam.logo,
+        awayTeamLogo: awayTeam.logo,
         dateTime: fixture.dateTime,
         points: prediction?.points,
         prediction: prediction,

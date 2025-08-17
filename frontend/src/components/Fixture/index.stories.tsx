@@ -9,6 +9,8 @@ export const FixtureStory: Story = () => (
       homeScore={1}
       awayScore={0}
       dateTime={1718564400000}
+      homeTeamLogo=""
+      awayTeamLogo=""
     />
   </div>
 );

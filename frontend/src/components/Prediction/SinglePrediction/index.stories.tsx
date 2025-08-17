@@ -19,6 +19,7 @@ export const SinglePredictionStory: Story = () => (
       homeTeamScore: 0,
       awayTeamScore: 0,
     }}
+    dateTime={0}
   />
 );
 

@@ -14,7 +14,7 @@ const Profile = () => {
   const { data: teams, isLoading: teamsIsLoading } = useGetTeams();
   const { data: fixtures, isLoading: fixturesIsLoading } = useGetFixtures();
   const { data: predictions, isLoading: predictionsIsLoading } =
-    useGetPredictions(username);
+    useGetPredictions(username, Date.now(), () => {});
 
   if (userIsLoading) {
     return <Loading />;
