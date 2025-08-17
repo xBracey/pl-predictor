@@ -18,6 +18,7 @@ export interface Prediction {
 export interface Team {
   id: number;
   name: string;
+  logo: string;
 }
 export interface User {
   username: string;

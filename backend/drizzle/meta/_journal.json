@@ -8,6 +8,13 @@
       "when": 1754722362868,
       "tag": "0000_orange_power_pack",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1755453476499,
+      "tag": "0001_sweet_rafael_vega",
+      "breakpoints": true
     }
   ]
 }

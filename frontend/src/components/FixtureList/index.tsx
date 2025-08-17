@@ -10,18 +10,16 @@ interface IFixtureList {
 const FixtureList = ({ teams, fixtures }: IFixtureList) => {
   const fixturesWithTeams = useMemo(() => {
     const data = [...fixtures].map((fixture) => {
-      const homeTeam = teams.find(
-        (team) => team.id === fixture.homeTeamId
-      )?.name;
-      const awayTeam = teams.find(
-        (team) => team.id === fixture.awayTeamId
-      )?.name;
+      const homeTeam = teams.find((team) => team.id === fixture.homeTeamId);
+      const awayTeam = teams.find((team) => team.id === fixture.awayTeamId);
       return {
         dateTime: fixture.dateTime,
-        homeTeam,
-        awayTeam,
+        homeTeam: homeTeam.name,
+        awayTeam: awayTeam.name,
         homeScore: fixture.homeTeamScore,
         awayScore: fixture.awayTeamScore,
+        homeTeamLogo: homeTeam.logo,
+        awayTeamLogo: awayTeam.logo,
       };
     });
 
@@ -41,6 +39,8 @@ const FixtureList = ({ teams, fixtures }: IFixtureList) => {
           homeScore={fixture.homeScore}
           awayScore={fixture.awayScore}
           dateTime={fixture.dateTime}
+          homeTeamLogo={fixture.homeTeamLogo}
+          awayTeamLogo={fixture.awayTeamLogo}
         />
       </div>
     );
@@ -56,6 +56,8 @@ const FixtureList = ({ teams, fixtures }: IFixtureList) => {
             homeScore={fixture.homeScore}
             awayScore={fixture.awayScore}
             dateTime={fixture.dateTime}
+            homeTeamLogo={fixture.homeTeamLogo}
+            awayTeamLogo={fixture.awayTeamLogo}
           />
         </div>
       ))}

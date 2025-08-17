@@ -5,6 +5,8 @@ const transformName = (name: string) => name.replace(/\s/g, "_");
 interface IFixture {
   homeTeam: string;
   awayTeam: string;
+  homeTeamLogo: string;
+  awayTeamLogo: string;
   homeScore?: number;
   awayScore?: number;
   dateTime: number;
@@ -15,6 +17,8 @@ interface IFixture {
 const Fixture = ({
   homeTeam,
   awayTeam,
+  homeTeamLogo,
+  awayTeamLogo,
   homeScore,
   awayScore,
   dateTime,
@@ -25,7 +29,7 @@ const Fixture = ({
     <div className="flex flex-col items-center justify-between text-sm font-bold text-white">
       <div className="flex items-center gap-1.5">
         <img
-          src={`/logos/${transformName(homeTeam)}.png`}
+          src={homeTeamLogo}
           alt={homeTeam}
           className="h-10 w-10 object-contain"
         />
@@ -43,7 +47,7 @@ const Fixture = ({
         )}
         <p>{isProfilePage ? awayTeam.slice(0, 3).toUpperCase() : awayTeam}</p>
         <img
-          src={`/logos/${transformName(awayTeam)}.png`}
+          src={awayTeamLogo}
           alt={awayTeam}
           className="h-10 w-10 object-contain"
         />

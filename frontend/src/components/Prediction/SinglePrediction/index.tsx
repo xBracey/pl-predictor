@@ -56,12 +56,14 @@ const SinglePrediction: React.FC<SinglePredictionProps> = ({
         <div className="flex w-full">
           <TeamPrediction
             teamName={homeTeam.name}
+            logo={homeTeam.logo}
             score={homeTeamScore}
             incrementScore={incrementHomeScore}
             decrementScore={decrementHomeScore}
           />
           <TeamPrediction
             teamName={awayTeam.name}
+            logo={awayTeam.logo}
             score={awayTeamScore}
             incrementScore={incrementAwayScore}
             decrementScore={decrementAwayScore}

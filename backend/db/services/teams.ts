@@ -25,20 +25,20 @@ export const getTeamHandler: ServiceHandler = async (request, reply) => {
 };
 
 export const insertTeamsHandler: ServiceHandler = async (request, reply) => {
-  const { name } = request.body as { name: string };
+  const { name, logo} = request.body as { name: string, logo: string };
 
-  await insertTeam({ name });
+  await insertTeam({ name, logo});
 
-  reply.send({ name });
+  reply.send({ name, logo});
 };
 
 export const editTeamHandler: ServiceHandler = async (request, reply) => {
   const { id } = request.params as { id: string };
-  const { name } = request.body as { name: string };
+  const { name, logo } = request.body as { name: string, logo: string};
 
-  await editTeam(parseInt(id), { name });
+  await editTeam(parseInt(id), { name, logo});
 
-  reply.send({ name });
+  reply.send({ name, logo });
 };
 
 export const deleteTeamHandler: ServiceHandler = async (request, reply) => {

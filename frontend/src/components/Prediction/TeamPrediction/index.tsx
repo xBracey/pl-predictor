@@ -22,6 +22,7 @@ const PredictionButton = ({
 
 interface ITeamPrediction {
   teamName: string;
+  logo: string;
   score: number;
   incrementScore: () => void;
   decrementScore: () => void;
@@ -30,6 +31,7 @@ interface ITeamPrediction {
 
 const TeamPrediction = ({
   teamName,
+  logo,
   score,
   incrementScore,
   decrementScore,
@@ -43,7 +45,7 @@ const TeamPrediction = ({
     >
       <span className="text-base font-bold">{teamName}</span>
       <img
-        src={`/logos/${transformName(teamName)}.png`}
+        src={logo}
         alt={teamName}
         className="h-8 w-8 object-contain"
       />
