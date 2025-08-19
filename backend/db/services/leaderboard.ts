@@ -1,13 +1,29 @@
-import { getLeaderboard, getLeaderboardByRound } from "../repositories/leaderboard";
+import {
+  getLeaderboard,
+  getLeaderboardByRound,
+  getMonthlyLeaderboard,
+} from "../repositories/leaderboard";
 import { ServiceHandler } from "./types";
+
+export const getMonthlyLeaderboardsHandler: ServiceHandler = async (
+  request,
+  reply
+) => {
+  const { year, month } = request.params as { year: string; month: string };
+
+  const leaderboardData = await getMonthlyLeaderboard(
+    parseInt(year),
+    parseInt(month)
+  );
+
+  return reply.send(leaderboardData ?? []);
+};
 
 export const getLeaderboardsHandler: ServiceHandler = async (
   request,
   reply
 ) => {
-  const { timePeriod } = request.params as { timePeriod: string };
-
-  const leaderboardData = await getLeaderboard(timePeriod);
+  const leaderboardData = await getLeaderboard();
 
   return reply.send(leaderboardData ?? []);
 };
